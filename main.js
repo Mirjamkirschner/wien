@@ -69,3 +69,10 @@ async function showSights(url) {
 }
 showSights("https://data.wien.gv.at/daten/geo?service=WFS&request=GetFeature&version=1.1.0&typeName=ogdwien:SEHENSWUERDIGOGD&srsName=EPSG:4326&outputFormat=json");
 
+async function showZones(url) {
+    let response = await fetch(url); 
+    let jsondata = await response.json (); 
+    L.geoJSON(jsondata).addTo(themaLayer.zones); 
+    //console.log(response);
+}
+showZones("https://data.wien.gv.at/daten/geo?service=WFS&request=GetFeature&version=1.1.0&typeName=ogdwien:FUSSGEHERZONEOGD&srsName=EPSG:4326&outputFormat=json");
