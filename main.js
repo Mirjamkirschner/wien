@@ -15,9 +15,9 @@ let map = L.map("map").setView([
 //thematische Layer 
 let themaLayer = {
     stops: L.featureGroup(),
-    lines: L.featureGroup().addTo(map),
-    zones: L.featureGroup().addTo(map),
-    sights: L.featureGroup(),
+    lines: L.featureGroup(),
+    zones: L.featureGroup(),
+    sights: L.featureGroup().addTo(map),
 }
 
 // Hintergrundlayer
@@ -91,7 +91,7 @@ async function showLines(url) {
             <end><i class="fa-regular fa-circle-stop"></i> ${prop.TO_NAME}</end>
             `);
             lineNames[prop.LINE_ID] = prop.LINE_NAME;
-            console.log(lineNames);
+            //console.log(lineNames);
         }
     }).addTo(themaLayer.lines);
     //console.log(response);
@@ -102,6 +102,13 @@ async function showSights(url) {
     let response = await fetch(url);
     let jsondata = await response.json();
     L.geoJSON(jsondata, {
+        pointToLayer: function(feature, latlng) {
+            return L.marker(latlng, {
+                iconUrl: 'photo.png',
+                iconSize: [38, 95],
+                iconAnchor: [22, 94],
+            });
+        },
         onEachFeature: function (feature, layer) {
             let prop = feature.properties; //Variable damit kürzer; * steht als Platzhalter für Bildunterschrift, Link für Infos, nur 1 Tab für Links
             layer.bindPopup(`
