@@ -45,21 +45,13 @@ L.control.scale({
 //Vienna Sightseeing Haltestellen
 //asynchrone Funktion, damit schneller geladen werden kann
 async function showStops(url) {
-    let stopColors = {
-        "1": "#FF4136", //Red Line
-        "2": "#FFDC00", //Yellow Line
-        "3": "#0074D9", //Blue Line
-        "4": "#2ECC40", //Green Line
-        "5": "#AAAAAA", //Grey Line
-        "6": "#FF851B", //Orange Line 
-    }
     let response = await fetch(url); //Anfrage, Antwort kommt zurück
     let jsondata = await response.json(); //json Daten aus Response entnehmen 
     L.geoJSON(jsondata, {
         pointToLayer: function (feature, latlng) {
             return L.marker(latlng, {
                 icon: L.icon({
-                    iconUrl: 'bus.png',
+                    iconUrl: `bus_${feature.properties.LINE_ID}.png`,
                     popupAnchor: [0, -37],
                     iconAnchor: [16, 37],
                 })
@@ -71,7 +63,7 @@ async function showStops(url) {
                 <line><i class="fa-solid fa-bus"></i> ${prop.LINE_NAME}</line> </br></br>
                 <stop>${prop.STAT_ID} ${prop.STAT_NAME}</stop>
                 `);
-            //console.log(prop.NAME);
+            console.log(prop);
         }
     }).addTo(themaLayer.stops); //alle Busstopps anzeigen als Marker
     //console.log(response);
