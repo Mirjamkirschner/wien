@@ -14,10 +14,11 @@ let map = L.map("map").setView([
 
 //thematische Layer 
 let themaLayer = {
-    stops: L.featureGroup().addTo(map),
-    lines: L.featureGroup().addTo(map),
-    zones: L.featureGroup().addTo(map),
-    sights: L.featureGroup().addTo(map),
+    stops: L.featureGroup(),
+    lines: L.featureGroup(),
+    zones: L.featureGroup(),
+    sights: L.featureGroup(),
+    hotels: L.featureGroup().addTo(map),
 }
 
 // Hintergrundlayer
@@ -160,6 +161,42 @@ async function showZones(url) {
     //console.log(response);
 }
 showZones("https://data.wien.gv.at/daten/geo?service=WFS&request=GetFeature&version=1.1.0&typeName=ogdwien:FUSSGEHERZONEOGD&srsName=EPSG:4326&outputFormat=json");
+
+
+//Hotels
+async function showHotels(url) {
+    let response = await fetch(url);
+    let jsondata = await response.json();
+    L.geoJSON(jsondata, {
+        pointToLayer: function (feature, latlng) {
+            return L.marker(latlng, {
+                icon: L.icon({
+                    iconUrl: 'hotel.png',
+                    popupAnchor: [0, -37],
+                    iconAnchor: [16, 37],
+                })
+            });
+        },
+        onEachFeature: function (feature, layer) {
+            let prop = feature.properties; //Variable damit kürzer; * steht als Platzhalter für Bildunterschrift, Link für Infos, nur 1 Tab für Links
+            layer.bindPopup(`
+            <h3> ${prop.BETRIEB}<br>
+            <h4> ${prop.BETRIEBSART_TXT} ${prop.KATEGORIE_TXT}<br>
+            <hr></hr>
+            <address>${prop.ADRESSE}</adress><br>
+            <telefon>${prop.KONTAKT_TEL}</telefon><br>
+            <email><a href="${prop.KONTAKT_EMAIL}target="E-Mail">${prop.KONTAKT_EMAIL}</a></email><br>
+            <website><a href="${prop.WEBLINK1}"}target="Website">${prop.WEBLINK1}</a></email>
+            `);
+            //console.log(prop.NAME);
+        }
+    }).addTo(themaLayer.hotels);
+    console.log(response);
+}
+showHotels("https://data.wien.gv.at/daten/geo?service=WFS&request=GetFeature&version=1.1.0&typeName=ogdwien:UNTERKUNFTOGD&srsName=EPSG:4326&outputFormat=json");
+
+
+
 
 map.addControl(new L.Control.Fullscreen({
     title: {
