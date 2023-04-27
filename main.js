@@ -14,10 +14,10 @@ let map = L.map("map").setView([
 
 //thematische Layer 
 let themaLayer = {
-    stops: L.featureGroup(),
+    stops: L.featureGroup().addTo(map),
     lines: L.featureGroup(),
     zones: L.featureGroup(),
-    sights: L.featureGroup().addTo(map),
+    sights: L.featureGroup(),
 }
 
 // Hintergrundlayer
@@ -48,6 +48,15 @@ async function showStops(url) {
     let response = await fetch(url); //Anfrage, Antwort kommt zurück
     let jsondata = await response.json(); //json Daten aus Response entnehmen 
     L.geoJSON(jsondata, {
+        pointToLayer: function (feature, latlng) {
+            return L.marker(latlng, {
+                icon: L.icon({
+                    iconUrl: 'bus.png',
+                    popupAnchor: [0, -37],
+                    iconAnchor: [16, 37],
+                })
+            });
+        },
         onEachFeature: function (feature, layer) {
             let prop = feature.properties; //Variable damit kürzer; * steht als Platzhalter für Bildunterschrift, Link für Infos, nur 1 Tab für Links
             layer.bindPopup(`
@@ -66,12 +75,12 @@ async function showLines(url) {
     let jsondata = await response.json();
     let lineNames = {};
     let lineColors = {  // https://clrs.cc/
-            "1": "#FF4136", //Red Line
-            "2": "#FFDC00", //Yellow Line
-            "3": "#0074D9", //Blue Line
-            "4": "#2ECC40", //Green Line
-            "5": "#AAAAAA", //Grey Line
-            "6": "#FF851B", //Orange Line
+        "1": "#FF4136", //Red Line
+        "2": "#FFDC00", //Yellow Line
+        "3": "#0074D9", //Blue Line
+        "4": "#2ECC40", //Green Line
+        "5": "#AAAAAA", //Grey Line
+        "6": "#FF851B", //Orange Line
     }
 
     L.geoJSON(jsondata, {
@@ -102,11 +111,13 @@ async function showSights(url) {
     let response = await fetch(url);
     let jsondata = await response.json();
     L.geoJSON(jsondata, {
-        pointToLayer: function(feature, latlng) {
+        pointToLayer: function (feature, latlng) {
             return L.marker(latlng, {
-                iconUrl: 'photo.png',
-                iconSize: [38, 95],
-                iconAnchor: [22, 94],
+                icon: L.icon({
+                    iconUrl: 'photo.png',
+                    popupAnchor: [0, -37],
+                    iconAnchor: [16, 37],
+                })
             });
         },
         onEachFeature: function (feature, layer) {
@@ -140,7 +151,7 @@ async function showZones(url) {
             layer.bindPopup(`
             <ort>Fußgängerzone ${prop.ADRESSE}</ort></br></br>
             <zeitraum><i class="fa-regular fa-clock"></i> ${prop.ZEITRAUM || "dauerhaft"}</zeitraum></br></br>
-            <information><i class="fa-solid fa-circle-info"></i> ${prop.AUSN_TEXT||"keine Ausnahmen"}</information>
+            <information><i class="fa-solid fa-circle-info"></i> ${prop.AUSN_TEXT || "keine Ausnahmen"}</information>
 
             `);
             //console.log(prop.NAME);
