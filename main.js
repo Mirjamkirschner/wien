@@ -16,7 +16,7 @@ let map = L.map("map").setView([
 let themaLayer = {
     stops: L.featureGroup(),
     lines: L.featureGroup().addTo(map),
-    zones: L.featureGroup(),
+    zones: L.featureGroup().addTo(map),
     sights: L.featureGroup(),
 }
 
@@ -120,6 +120,14 @@ async function showZones(url) {
     let response = await fetch(url);
     let jsondata = await response.json();
     L.geoJSON(jsondata, {
+        style: function (feature) {
+            return {
+                color: "FUCHSIA",
+                weight: 1,
+                opacity: 0.4,
+                fillOpacity: 0.1,
+            };
+        },
         onEachFeature: function (feature, layer) {
             let prop = feature.properties; //Variable damit kürzer; * steht als Platzhalter für Bildunterschrift, Link für Infos, nur 1 Tab für Links
             layer.bindPopup(`
