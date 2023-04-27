@@ -54,7 +54,7 @@ async function showStops(url) {
                 <line><i class="fa-solid fa-bus"></i> ${prop.LINE_NAME}</line> </br></br>
                 <stop>${prop.STAT_ID} ${prop.STAT_NAME}</stop>
                 `);
-            console.log(prop.NAME);
+            //console.log(prop.NAME);
         }
     }).addTo(themaLayer.stops); //alle Busstopps anzeigen als Marker
     //console.log(response);
@@ -73,7 +73,7 @@ async function showLines(url) {
             <i class="fa-sharp fa-solid fa-arrow-down"></i></br>
             <end><i class="fa-regular fa-circle-stop"></i> ${prop.TO_NAME}</end>
             `);
-            console.log(prop.NAME);
+            //console.log(prop.NAME);
         }
     }).addTo(themaLayer.lines);
     //console.log(response);
@@ -91,7 +91,7 @@ async function showSights(url) {
             <h4><a href="${prop.WEITERE_INF}" target="Wien">${prop.NAME}</a></h4>
             <address>${prop.ADRESSE}</adress>
             `);
-            console.log(prop.NAME);
+            //console.log(prop.NAME);
         }
     }).addTo(themaLayer.sights);
     //console.log(response);
@@ -110,7 +110,7 @@ async function showZones(url) {
             <information><i class="fa-solid fa-circle-info"></i> ${prop.AUSN_TEXT||"keine Ausnahmen"}</information>
 
             `);
-            console.log(prop.NAME);
+            //console.log(prop.NAME);
         }
     }).addTo(themaLayer.zones);
     //console.log(response);
