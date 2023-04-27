@@ -64,7 +64,24 @@ showStops("https://data.wien.gv.at/daten/geo?service=WFS&request=GetFeature&vers
 async function showLines(url) {
     let response = await fetch(url);
     let jsondata = await response.json();
+    let lineNames = {};
+    let lineColors = {  // https://clrs.cc/
+            "1": "#FF4136", //Red Line
+            "2": "#FFDC00", //Yellow Line
+            "3": "#0074D9", //Blue Line
+            "4": "#2ECC40", //Green Line
+            "5": "#AAAAAA", //Grey Line
+            "6": "#FF851B", //Orange Line
+    }
+
     L.geoJSON(jsondata, {
+        style: function (feature) {
+            return {
+                color: lineColors[feature.properties.LINE_ID],
+                weight: 3,
+                dashArray: [10, 4],
+            };
+        },
         onEachFeature: function (feature, layer) {
             let prop = feature.properties; //Variable damit kürzer; * steht als Platzhalter für Bildunterschrift, Link für Infos, nur 1 Tab für Links
             layer.bindPopup(`
@@ -73,7 +90,8 @@ async function showLines(url) {
             <i class="fa-sharp fa-solid fa-arrow-down"></i></br>
             <end><i class="fa-regular fa-circle-stop"></i> ${prop.TO_NAME}</end>
             `);
-            //console.log(prop.NAME);
+            lineNames[prop.LINE_ID] = prop.LINE_NAME;
+            console.log(lineNames);
         }
     }).addTo(themaLayer.lines);
     //console.log(response);
