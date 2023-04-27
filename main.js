@@ -15,9 +15,9 @@ let map = L.map("map").setView([
 //thematische Layer 
 let themaLayer = {
     stops: L.featureGroup().addTo(map),
-    lines: L.featureGroup(),
-    zones: L.featureGroup(),
-    sights: L.featureGroup(),
+    lines: L.featureGroup().addTo(map),
+    zones: L.featureGroup().addTo(map),
+    sights: L.featureGroup().addTo(map),
 }
 
 // Hintergrundlayer
@@ -63,7 +63,7 @@ async function showStops(url) {
                 <line><i class="fa-solid fa-bus"></i> ${prop.LINE_NAME}</line> </br></br>
                 <stop>${prop.STAT_ID} ${prop.STAT_NAME}</stop>
                 `);
-            console.log(prop);
+            //console.log(prop);
         }
     }).addTo(themaLayer.stops); //alle Busstopps anzeigen als Marker
     //console.log(response);
