@@ -18,8 +18,7 @@ let themaLayer = {
     lines: L.featureGroup(),
     zones: L.featureGroup(),
     sights: L.featureGroup(),
-    hotels: L.featureGroup(),
-    citybikes: L.featureGroup().addTo(map),
+    hotels: L.featureGroup().addTo(map),
 }
 
 // Hintergrundlayer
@@ -37,7 +36,6 @@ let layerControl = L.control.layers({
     "Fußgängerzonen": themaLayer.zones,
     "Sehenswürdigkeiten": themaLayer.sights,
     "Hotels": themaLayer.hotels,
-    "Citybikes": themaLayer.citybikes,
 }).addTo(map);
 
 
@@ -174,9 +172,36 @@ async function showHotels(url) {
         pointToLayer: function (feature, latlng) {
             return L.marker(latlng, {
                 icon: L.icon({
-                    iconUrl: 'hotel.png',
-                    popupAnchor: [0, -37],
-                    iconAnchor: [16, 37],
+                    if(KATEGORIE_TXT='1*') {
+                        iconUrl: 'hotel_1.png';
+                        popupAnchor: [0, -37];
+                        iconAnchor: [16, 37];
+                    },
+                    else if(KATEGORIE_TXT==='2*'){
+                        iconUrl: 'hotel_2.png';
+                        popupAnchor: [0, -37];
+                        iconAnchor: [16, 37];
+                    },
+                    else if(KATEGORIE_TXT==='3*'){
+                        iconUrl: 'hotel_3.png';
+                        popupAnchor: [0, -37];
+                        iconAnchor: [16, 37];
+                    },
+                    else if(KATEGORIE_TXT==='4*'){
+                        iconUrl: 'hotel_4.png';
+                        popupAnchor: [0, -37];
+                        iconAnchor: [16, 37];
+                    },
+                    else if(KATEGORIE_TXT==='5*'){
+                        iconUrl: 'hotel_5.png';
+                        popupAnchor: [0, -37];
+                        iconAnchor: [16, 37];
+                    },
+                    else {
+                        iconUrl: 'hotel.png',
+                        popupAnchor: [0, -37],
+                        iconAnchor: [16, 37],
+                    }
                 })
             });
         },
@@ -186,10 +211,10 @@ async function showHotels(url) {
             <h3> ${prop.BETRIEB}
             <h4> ${prop.BETRIEBSART_TXT} ${prop.KATEGORIE_TXT}
             <hr></hr>
-            <address>${prop.ADRESSE}</adress><br>
-            <telefon>${prop.KONTAKT_TEL}</telefon><br>
-            <email><a href="${prop.KONTAKT_EMAIL}target="E-Mail">${prop.KONTAKT_EMAIL}</a></email><br>
-            <website><a href="${prop.WEBLINK1}"}target="Website">${prop.WEBLINK1}</a></email>
+            <adress>${prop.ADRESSE}</adress><br>
+            <telefon><a href="tel:${prop.KONTAKT_TEL}">${prop.KONTAKT_TEL}</telefon><br>
+            <email><a href="${prop.KONTAKT_EMAIL}">${prop.KONTAKT_EMAIL}</a></email><br>
+            <website><a href="${prop.WEBLINK1}">Homepage</a></email>
             `);
             //console.log(prop.NAME);
         }
@@ -199,37 +224,7 @@ async function showHotels(url) {
 showHotels("https://data.wien.gv.at/daten/geo?service=WFS&request=GetFeature&version=1.1.0&typeName=ogdwien:UNTERKUNFTOGD&srsName=EPSG:4326&outputFormat=json");
 
 
-//Citybikes
-async function showCitybikes(url) {
-    let response = await fetch(url);
-    let jsondata = await response.json();
-    L.geoJSON(jsondata, {
-        pointToLayer: function (feature, latlng) {
-            return L.marker(latlng, {
-                icon: L.icon({
-                    iconUrl: 'bike.png',
-                    popupAnchor: [0, -37],
-                    iconAnchor: [16, 37],
-                })
-            });
-        },
-        onEachFeature: function (feature, layer) {
-            let prop = feature.properties; //Variable damit kürzer; * steht als Platzhalter für Bildunterschrift, Link für Infos, nur 1 Tab für Links
-            layer.bindPopup(`
-            <h3> ${prop.BETRIEB}
-            <h4> ${prop.BETRIEBSART_TXT} ${prop.KATEGORIE_TXT}
-            <hr></hr>
-            <address>${prop.ADRESSE}</adress><br>
-            <telefon>${prop.KONTAKT_TEL}</telefon><br>
-            <email><a href="${prop.KONTAKT_EMAIL}target="E-Mail">${prop.KONTAKT_EMAIL}</a></email><br>
-            <website><a href="${prop.WEBLINK1}"}target="Website">${prop.WEBLINK1}</a></email>
-            `);
-            //console.log(prop.NAME);
-        }
-    }).addTo(themaLayer.citybikes);
-    //console.log(response);
-}
-showCitybikes("https://data.wien.gv.at/daten/geo?service=WFS&request=GetFeature&version=1.1.0&typeName=ogdwien:CITYBIKEOGD&srsName=EPSG:4326&outputFormat=json");
+
 
 
 map.addControl(new L.Control.Fullscreen({
