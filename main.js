@@ -169,73 +169,63 @@ async function showHotels(url) {
     let response = await fetch(url);
     let jsondata = await response.json();
     L.geoJSON(jsondata, {
-        pointToLayer: function (feature, latlng) {
-            return L.marker(latlng, {
+        pointToLayer: function(feature, latlng) {
                 
-                    if(${properties.KATEGORIE_TXT}='1*') {
-                        icon: L.icon({
-                        iconUrl: 'hotel_1.png',
-                        popupAnchor: [0, -37],
-                        iconAnchor: [16, 37],
-                        })
-                    }
-                    else if(${properties.KATEGORIE_TXT}==='2*'){
-                        icon: L.icon({
-                        iconUrl: 'hotel_2.png',
-                        popupAnchor: [0, -37],
-                        iconAnchor: [16, 37],
-                    })
-                    }
-                    else if(KATEGORIE_TXT==='3*'){
-                        icon: L.icon({
-                        iconUrl: 'hotel_3.png',
-                        popupAnchor: [0, -37],
-                        iconAnchor: [16, 37],
-                    })
-                    }
-                    else if(KATEGORIE_TXT==='4*'){
-                        icon: L.icon({
-                        iconUrl: 'hotel_4.png',
-                        popupAnchor: [0, -37],
-                        iconAnchor: [16, 37],
-                    })
-                    }
-                    else if(KATEGORIE_TXT==='5*'){
-                        icon: L.icon({
-                        iconUrl: 'hotel_5.png',
-                        popupAnchor: [0, -37],
-                        iconAnchor: [16, 37],
-                    })
-                    }
-                    else {
-                        icon: L.icon({
-                        iconUrl: 'hotel.png',
-                        popupAnchor: [0, -37],
-                        iconAnchor: [16, 37],
-                    })
-                    }
+            if (feature.properties.KATEGORIE_TXT == "nicht kategorisiert") {
+                icon = "hotel.png"
+            }
+            else if (feature.properties.KATEGORIE_TXT == "1*") {
+                icon = "hotel_1.png"
+            }
+            else if (feature.properties.KATEGORIE_TXT == "2*") {
+                icon = "hotel_2.png"
+            }
+            else if (feature.properties.KATEGORIE_TXT == "3*") {
+                icon = "hotel_3.png"
+            }
+            else if (feature.properties.KATEGORIE_TXT == "4*") {
+                icon = "hotel_4.png"
+            }
+            else if (feature.properties.KATEGORIE_TXT == "5*") {
+                icon = "hotel_5.png"
+            }
+
+
+            return L.marker(latlng, {
+                icon: L.icon({
+                    iconUrl: 'hotel.png',
+                    iconUrl: icon,
+                    iconAnchor: [16, 37],
+                    popupAnchor: [0, -37],
+                    
+                })
             });
         },
-        onEachFeature: function (feature, layer) {
-            let prop = feature.properties; //Variable damit kürzer; * steht als Platzhalter für Bildunterschrift, Link für Infos, nur 1 Tab für Links
-            layer.bindPopup(`
-            <h3> ${prop.BETRIEB}
-            <h4> ${prop.BETRIEBSART_TXT} ${prop.KATEGORIE_TXT}
-            <hr></hr>
-            <adress>${prop.ADRESSE}</adress><br>
-            <telefon><a href="tel:${prop.KONTAKT_TEL}">${prop.KONTAKT_TEL}</telefon><br>
-            <email><a href="${prop.KONTAKT_EMAIL}">${prop.KONTAKT_EMAIL}</a></email><br>
-            <website><a href="${prop.WEBLINK1}">Homepage</a></email>
-            `);
-            //console.log(prop.NAME);
-        }
-    }).addTo(themaLayer.hotels);
-    console.log(response);
+
+    onEachFeature: function(feature, layer){
+        let prop = feature.properties;
+        layer.bindPopup(`
+        
+        <h3>${prop.BETRIEB}</h3>
+        <h4>${prop.BETRIEBSART_TXT} ${prop.KATEGORIE_TXT}  </h4>
+        <hr></hr>
+        Addr.: ${prop.ADRESSE} <br>
+        Tel.: <a href="mailto:${prop.KONTAKT_EMAIL}"> ${prop.KONTAKT_EMAIL}</a><br>
+        
+        <a href="${prop.WEBLINK1}">Homepage</a><br>
+        
+        
+    `);
+        //console.log(feature.properties, prop.LINE_NAME);
+
+    }
+}).addTo(themaLayer.hotels);
+
 }
-showHotels("https://data.wien.gv.at/daten/geo?service=WFS&request=GetFeature&version=1.1.0&typeName=ogdwien:UNTERKUNFTOGD&srsName=EPSG:4326&outputFormat=json");
+showHotels("https://data.wien.gv.at/daten/geo?service=WFS&request=GetFeature&version=1.1.0&typeName=ogdwien:UNTERKUNFTOGD&srsName=EPSG:4326&outputFormat=json")
 
 
-
+       
 
 
 map.addControl(new L.Control.Fullscreen({
