@@ -171,38 +171,49 @@ async function showHotels(url) {
     L.geoJSON(jsondata, {
         pointToLayer: function (feature, latlng) {
             return L.marker(latlng, {
-                icon: L.icon({
-                    if(KATEGORIE_TXT='1*') {
-                        iconUrl: 'hotel_1.png';
-                        popupAnchor: [0, -37];
-                        iconAnchor: [16, 37];
-                    },
-                    else if(KATEGORIE_TXT==='2*'){
-                        iconUrl: 'hotel_2.png';
-                        popupAnchor: [0, -37];
-                        iconAnchor: [16, 37];
-                    },
+                
+                    if(${properties.KATEGORIE_TXT}='1*') {
+                        icon: L.icon({
+                        iconUrl: 'hotel_1.png',
+                        popupAnchor: [0, -37],
+                        iconAnchor: [16, 37],
+                        })
+                    }
+                    else if(${properties.KATEGORIE_TXT}==='2*'){
+                        icon: L.icon({
+                        iconUrl: 'hotel_2.png',
+                        popupAnchor: [0, -37],
+                        iconAnchor: [16, 37],
+                    })
+                    }
                     else if(KATEGORIE_TXT==='3*'){
-                        iconUrl: 'hotel_3.png';
-                        popupAnchor: [0, -37];
-                        iconAnchor: [16, 37];
-                    },
+                        icon: L.icon({
+                        iconUrl: 'hotel_3.png',
+                        popupAnchor: [0, -37],
+                        iconAnchor: [16, 37],
+                    })
+                    }
                     else if(KATEGORIE_TXT==='4*'){
-                        iconUrl: 'hotel_4.png';
-                        popupAnchor: [0, -37];
-                        iconAnchor: [16, 37];
-                    },
+                        icon: L.icon({
+                        iconUrl: 'hotel_4.png',
+                        popupAnchor: [0, -37],
+                        iconAnchor: [16, 37],
+                    })
+                    }
                     else if(KATEGORIE_TXT==='5*'){
-                        iconUrl: 'hotel_5.png';
-                        popupAnchor: [0, -37];
-                        iconAnchor: [16, 37];
-                    },
+                        icon: L.icon({
+                        iconUrl: 'hotel_5.png',
+                        popupAnchor: [0, -37],
+                        iconAnchor: [16, 37],
+                    })
+                    }
                     else {
+                        icon: L.icon({
                         iconUrl: 'hotel.png',
                         popupAnchor: [0, -37],
                         iconAnchor: [16, 37],
+                    })
                     }
-                })
             });
         },
         onEachFeature: function (feature, layer) {
